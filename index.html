@@ -113,14 +113,44 @@
     .dot:nth-child(1){ background: rgba(255,45,85,.65); }
     .dot:nth-child(2){ background: rgba(255,176,0,.62); }
     .dot:nth-child(3){ background: rgba(53,214,255,.62); }
+
+    .topbar .bar{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      width:100%;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
     .topbar span{
-      margin-left:8px;
       font-size: 12px;
       letter-spacing: .14em;
       text-transform: uppercase;
       color: rgba(255,255,255,.62);
       user-select:none;
+      white-space: nowrap;
     }
+
+    .topLinks{
+      display:flex;
+      gap: 14px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .topLinks a{
+      color: rgba(255,255,255,.78);
+      text-decoration:none;
+      border-bottom: 1px dashed rgba(255,255,255,.28);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .topLinks a:hover{ border-bottom-color: rgba(255,45,85,.7); }
+    .topLinks .sep{ opacity:.45; }
 
     .grid{
       display:grid;
@@ -158,9 +188,10 @@
 
     h1{
       margin: 0 0 10px;
-      font-size: clamp(34px, 5vw, 56px);
-      line-height: 1.02;
+      font-size: clamp(30px, 5vw, 56px);
+      line-height: 1.05;
       letter-spacing: -0.02em;
+      word-break: normal;
     }
     h1 .glow{
       background: linear-gradient(90deg, #fff, rgba(255,255,255,.72));
@@ -195,11 +226,16 @@
       border: 1px solid rgba(255,255,255,.09);
       transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
     }
-    .pill:hover{
-      transform: translateY(-2px);
-      border-color: rgba(255,45,85,.35);
-      box-shadow: 0 14px 30px rgba(0,0,0,.35);
+
+    /* Hover effects only for devices that actually have hover */
+    @media (hover:hover){
+      .pill:hover{
+        transform: translateY(-2px);
+        border-color: rgba(255,45,85,.35);
+        box-shadow: 0 14px 30px rgba(0,0,0,.35);
+      }
     }
+
     .pill .label{
       font-size: 12px;
       letter-spacing: .12em;
@@ -234,6 +270,11 @@
       position:relative;
       overflow:hidden;
       user-select:none;
+      text-decoration:none; /* for <a class="btn"> */
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
     }
     .btn::before{
       content:"";
@@ -243,13 +284,17 @@
       transition: opacity .15s ease;
       pointer-events:none;
     }
-    .btn:hover{
-      transform: translateY(-2px);
-      border-color: rgba(255,45,85,.45);
-      box-shadow: 0 16px 36px rgba(0,0,0,.42);
-      background: rgba(0,0,0,.30);
+
+    @media (hover:hover){
+      .btn:hover{
+        transform: translateY(-2px);
+        border-color: rgba(255,45,85,.45);
+        box-shadow: 0 16px 36px rgba(0,0,0,.42);
+        background: rgba(0,0,0,.30);
+      }
+      .btn:hover::before{ opacity:.35; }
     }
-    .btn:hover::before{ opacity:.35; }
+
     .btn:active{ transform: translateY(0px) scale(.99); }
 
     .btn.primary{
@@ -302,9 +347,11 @@
       border: 1px solid rgba(255,255,255,.09);
       transition: transform .15s ease, border-color .15s ease;
     }
-    .mini:hover{
-      transform: translateY(-2px);
-      border-color: rgba(53,214,255,.28);
+    @media (hover:hover){
+      .mini:hover{
+        transform: translateY(-2px);
+        border-color: rgba(53,214,255,.28);
+      }
     }
     .mini h3{
       margin: 0 0 8px;
@@ -389,7 +436,9 @@
       cursor:pointer;
       transition: transform .15s ease, border-color .15s ease;
     }
-    .x:hover{ transform: translateY(-1px); border-color: rgba(255,45,85,.45); }
+    @media (hover:hover){
+      .x:hover{ transform: translateY(-1px); border-color: rgba(255,45,85,.45); }
+    }
 
     .modalBody{
       padding: 16px 16px 18px;
@@ -444,6 +493,18 @@
       0%,100%{ transform: scale(1); opacity:.85; }
       50%{ transform: scale(1.35); opacity:1; }
     }
+
+    /* Mobile polish */
+    @media (max-width: 520px){
+      body{ padding: 18px 12px 40px; }
+      .topbar{ padding: 12px 14px; }
+      .grid{ padding: 16px; gap: 16px; }
+      .sub{ font-size: 15px; }
+      .btnRow{ flex-direction: column; align-items: stretch; }
+      .btn{ width: 100%; }
+      .footer{ padding: 14px 16px 18px; }
+      .photo{ transform: none; }
+    }
   </style>
 </head>
 
@@ -460,7 +521,21 @@
     <section class="card" id="inviteCard" aria-label="Melina's birthday invite">
       <div class="topbar">
         <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        <span>invite.exe — neon after hours vibe</span>
+
+        <!-- TOP RIGHT LINKS + LEFT LABEL -->
+        <div class="bar">
+          <span>invite.exe — neon after hours vibe</span>
+
+          <div class="topLinks" aria-label="Spotify albums">
+            <a href="https://open.spotify.com/album/2YHC9dhR9vMTdCeY0T1FOs" target="_blank" rel="noopener noreferrer">
+              HOUSE_OF_BALLONS.XO
+            </a>
+            <span class="sep">—</span>
+            <a href="https://open.spotify.com/album/4yP0hdKOZPNshxUOjY0cZj" target="_blank" rel="noopener noreferrer">
+              AFTER HOURS
+            </a>
+          </div>
+        </div>
       </div>
 
       <div class="grid" id="cardInner">
@@ -500,6 +575,11 @@
           </div>
 
           <div class="btnRow">
+            <!-- NEW: PLAY BUTTON -->
+            <a class="btn" href="https://open.spotify.com/album/2YHC9dhR9vMTdCeY0T1FOs" target="_blank" rel="noopener noreferrer">
+              ▶ Play House Of Balloons
+            </a>
+
             <button class="btn primary" id="playBtn">Play to unlock location 🎮</button>
             <button class="btn" id="copyBtn" title="Copy invite text">Copy invite text</button>
             <button class="btn locked" id="openMapBtn" disabled>Open map ↗</button>
@@ -508,7 +588,6 @@
 
         <div class="right">
           <div class="photo" id="photo">
-            <!-- Put meli.png in the same folder as this HTML -->
             <img src="meli.png" alt="Melina" />
           </div>
 
@@ -547,10 +626,10 @@
       <div class="modalBody">
         <div class="step" id="step1">
           <h4>Round 1 — Choose the vibe color</h4>
-          <div>Pick the most “neon night” option:</div>
+          <div>Pick the most “House of Balloons” option:</div>
           <div class="choices">
             <button class="btn" data-q="1" data-a="0">Pastel beige</button>
-            <button class="btn" data-q="1" data-a="1">Neon red</button>
+            <button class="btn" data-q="1" data-a="1">Black & White </button>
             <button class="btn" data-q="1" data-a="0">Office gray</button>
           </div>
         </div>
@@ -586,26 +665,30 @@
   </div>
 
   <script>
-    // ---- Card tilt on hover (no libraries) ----
+    // ---- Card tilt on hover (disable on touch devices) ----
     const card = document.getElementById('inviteCard');
     const photo = document.getElementById('photo');
 
+    const canHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
+
     function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
-    card.addEventListener('mousemove', (e) => {
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width;   // 0..1
-      const y = (e.clientY - r.top) / r.height;   // 0..1
-      const rx = clamp((0.5 - y) * 10, -10, 10);
-      const ry = clamp((x - 0.5) * 12, -12, 12);
-      card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
-      photo.style.transform = `translateZ(40px) rotateX(${rx*0.6}deg) rotateY(${ry*0.6}deg)`;
-    });
+    if (canHover) {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width;   // 0..1
+        const y = (e.clientY - r.top) / r.height;   // 0..1
+        const rx = clamp((0.5 - y) * 10, -10, 10);
+        const ry = clamp((x - 0.5) * 12, -12, 12);
+        card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
+        photo.style.transform = `translateZ(40px) rotateX(${rx*0.6}deg) rotateY(${ry*0.6}deg)`;
+      });
 
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0px)';
-      photo.style.transform = 'translateZ(40px)';
-    });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0px)';
+        photo.style.transform = 'translateZ(40px)';
+      });
+    }
 
     // ---- Modal / Game ----
     const modalBack = document.getElementById('modalBack');
@@ -642,7 +725,6 @@
         const a = btn.getAttribute('data-a') === '1';
         state['q'+q] = a;
 
-        // tiny feedback
         btn.style.borderColor = a ? 'rgba(53,214,255,.55)' : 'rgba(255,45,85,.55)';
         btn.style.boxShadow = a ? '0 0 24px rgba(53,214,255,.10)' : '0 0 24px rgba(255,45,85,.10)';
 
@@ -661,7 +743,6 @@
         statusEl.textContent = "Unlocked. See you there ✨";
         setTimeout(hideModal, 650);
       } else {
-        // If they clicked something wrong, keep it playful
         statusEl.textContent = answered ? "Not quite — adjust your choices 😈" : "Pick the right answers to unlock.";
       }
     }
@@ -674,7 +755,6 @@
       openMapBtn.classList.remove('locked');
       openMapBtn.disabled = false;
 
-      // confetti burst
       confettiBurst();
     }
 
@@ -689,7 +769,6 @@
       openMapBtn.disabled = true;
 
       statusEl.textContent = "Reset. Try again.";
-      // reset button styles
       modalBack.querySelectorAll('button[data-q]').forEach(b=>{
         b.style.borderColor = 'rgba(255,255,255,.14)';
         b.style.boxShadow = 'none';
@@ -719,7 +798,6 @@ Map: https://share.google/8tWEwYzo6fyaF4XkA`;
         copyBtn.textContent = "Copied ✔";
         setTimeout(()=> copyBtn.textContent = "Copy invite text", 1200);
       }catch(e){
-        // fallback
         prompt("Copy this text:", text);
       }
     });
@@ -748,8 +826,7 @@ Map: https://share.google/8tWEwYzo6fyaF4XkA`;
         const angle = Math.random() * Math.PI * 2;
         const speed = 3 + Math.random() * 6;
         confetti.push({
-          x: cx,
-          y: cy,
+          x: cx, y: cy,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed - 2,
           g: 0.10 + Math.random() * 0.08,
@@ -773,7 +850,6 @@ Map: https://share.google/8tWEwYzo6fyaF4XkA`;
           p.rot += p.vr;
           p.life -= 1;
 
-          // draw small rotated rectangles (no fixed colors; gradient-ish via alpha)
           ctx.save();
           ctx.translate(p.x, p.y);
           ctx.rotate(p.rot);
