@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Melina Turns 20 — Neon Game Invite</title>
+
+  <style>
+    :root{
+      --bg:#05050a;
+      --card: rgba(12, 10, 18, 0.72);
+      --stroke: rgba(255,255,255,0.12);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.72);
+      --hot:#ff2d55;
+      --neon:#b700ff;
+      --cyan:#35d6ff;
+      --amber:#ffb000;
+      --shadow: 0 22px 70px rgba(0,0,0,0.65);
+      --radius: 28px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body { height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(255,45,85,0.22), transparent 55%),
+                  radial-gradient(900px 650px at 85% 15%, rgba(183,0,255,0.18), transparent 55%),
+                  radial-gradient(900px 650px at 70% 90%, rgba(53,214,255,0.12), transparent 55%),
+                  linear-gradient(180deg, #05050a, #07070b 35%, #04040a);
+      overflow-x:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 30px 16px 60px;
+    }
+
+    /* Ambient animated blobs */
+    .bg{
+      position:fixed; inset:0; pointer-events:none;
+      filter: blur(26px) saturate(1.2);
+      opacity: .85;
+      z-index:-3;
+    }
+    .blob{
+      position:absolute;
+      width: 55vmax; height: 55vmax;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,45,85,.42), transparent 55%),
+                  radial-gradient(circle at 70% 60%, rgba(183,0,255,.32), transparent 58%),
+                  radial-gradient(circle at 45% 75%, rgba(53,214,255,.22), transparent 62%);
+      transform: translate3d(-10%, -8%, 0);
+      animation: floaty 12s ease-in-out infinite alternate;
+    }
+    .blob.b2{
+      width: 50vmax; height: 50vmax;
+      right: -18vmax; top: -10vmax;
+      transform: translate3d(0,0,0);
+      animation-duration: 15s;
+      animation-direction: alternate-reverse;
+      opacity: .75;
+    }
+    @keyframes floaty{
+      from{ transform: translate3d(-10%, -8%, 0) scale(1); }
+      to  { transform: translate3d(4%, 6%, 0) scale(1.08); }
+    }
+
+    /* Grain overlay */
+    .grain{
+      position:fixed; inset:0; pointer-events:none;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='170' height='170' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+      opacity:.35;
+      z-index:-2;
+    }
+
+    .wrap{
+      width: min(980px, 100%);
+      position:relative;
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(12px);
+      transform-style: preserve-3d;
+      transition: transform .18s ease, box-shadow .18s ease;
+      position:relative;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: linear-gradient(135deg, rgba(255,45,85,.65), rgba(183,0,255,.30), rgba(53,214,255,.20));
+      opacity:.14;
+      pointer-events:none;
+    }
+
+    .topbar{
+      display:flex; align-items:center; gap:10px;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      position:relative;
+      z-index:1;
+    }
+    .dot{ width:10px; height:10px; border-radius:999px; }
+    .dot:nth-child(1){ background: rgba(255,45,85,.65); }
+    .dot:nth-child(2){ background: rgba(255,176,0,.62); }
+    .dot:nth-child(3){ background: rgba(53,214,255,.62); }
+    .topbar span{
+      margin-left:8px;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.62);
+      user-select:none;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 22px;
+      padding: 26px 26px 30px;
+      position:relative;
+      z-index:1;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; padding: 18px; }
+    }
+
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 999px;
+      background: rgba(0,0,0,.22);
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .kicker b{
+      background: linear-gradient(90deg, var(--hot), var(--neon));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    h1{
+      margin: 0 0 10px;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+    }
+    h1 .glow{
+      background: linear-gradient(90deg, #fff, rgba(255,255,255,.72));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 22px rgba(255,45,85,.14);
+    }
+
+    .sub{
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 60ch;
+    }
+
+    .info{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    @media (max-width: 520px){
+      .info{ grid-template-columns: 1fr; }
+    }
+
+    .pill{
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.09);
+      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    .pill:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,45,85,.35);
+      box-shadow: 0 14px 30px rgba(0,0,0,.35);
+    }
+    .pill .label{
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.60);
+      margin-bottom: 6px;
+    }
+    .pill .value{
+      font-size: 15px;
+      color: rgba(255,255,255,.92);
+      line-height: 1.35;
+    }
+
+    /* Buttons */
+    .btnRow{
+      margin-top: 16px;
+      display:flex;
+      gap: 12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      color: rgba(255,255,255,.92);
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      cursor:pointer;
+      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
+      position:relative;
+      overflow:hidden;
+      user-select:none;
+    }
+    .btn::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: linear-gradient(135deg, rgba(255,45,85,.35), rgba(183,0,255,.20), rgba(53,214,255,.16));
+      opacity:.0;
+      transition: opacity .15s ease;
+      pointer-events:none;
+    }
+    .btn:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,45,85,.45);
+      box-shadow: 0 16px 36px rgba(0,0,0,.42);
+      background: rgba(0,0,0,.30);
+    }
+    .btn:hover::before{ opacity:.35; }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+
+    .btn.primary{
+      border-color: rgba(255,45,85,.35);
+      background: linear-gradient(135deg, rgba(255,45,85,.30), rgba(183,0,255,.16), rgba(0,0,0,.22));
+    }
+
+    a{
+      color: rgba(255,255,255,.92);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(255,255,255,.35);
+    }
+    a:hover{
+      border-bottom-color: rgba(255,45,85,.75);
+      text-shadow: 0 0 16px rgba(255,45,85,.22);
+    }
+
+    /* Right column */
+    .right{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      justify-content:center;
+      padding: 10px;
+    }
+    .photo{
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      overflow:hidden;
+      position:relative;
+      transform: translateZ(40px);
+      transition: transform .18s ease;
+    }
+    .photo::after{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(600px 300px at 50% 10%, rgba(255,45,85,.16), transparent 55%),
+        radial-gradient(600px 300px at 50% 90%, rgba(53,214,255,.10), transparent 55%);
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    .photo img{ display:block; width:100%; height:auto; }
+
+    .mini{
+      padding: 14px 14px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.09);
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .mini:hover{
+      transform: translateY(-2px);
+      border-color: rgba(53,214,255,.28);
+    }
+    .mini h3{
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.78);
+    }
+    .mini p{
+      margin:0;
+      color: rgba(255,255,255,.72);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .footer{
+      padding: 16px 26px 22px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
+      line-height: 1.55;
+      position:relative;
+      z-index:1;
+    }
+
+    /* Locked content */
+    .locked{
+      filter: blur(3px);
+      opacity: .55;
+      user-select:none;
+      pointer-events:none;
+      transition: filter .2s ease, opacity .2s ease;
+    }
+    .unlocked .locked{
+      filter:none;
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    /* Modal */
+    .modalBack{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(10px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modalBack.show{ display:flex; }
+
+    .modal{
+      width: min(720px, 100%);
+      background: rgba(12, 10, 18, 0.82);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 22px;
+      box-shadow: 0 22px 70px rgba(0,0,0,.7);
+      overflow:hidden;
+      position:relative;
+    }
+    .modalHeader{
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .modalHeader .title{
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-size: 12px;
+      color: rgba(255,255,255,.72);
+    }
+    .x{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      color: rgba(255,255,255,.85);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .x:hover{ transform: translateY(-1px); border-color: rgba(255,45,85,.45); }
+
+    .modalBody{
+      padding: 16px 16px 18px;
+    }
+    .step{
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      background: rgba(0,0,0,.22);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .step h4{
+      margin:0 0 8px;
+      font-size: 13px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(255,255,255,.78);
+    }
+    .choices{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .status{
+      margin-top: 10px;
+      color: rgba(255,255,255,.72);
+      font-size: 13px;
+      min-height: 18px;
+    }
+
+    /* Confetti canvas */
+    canvas#confetti{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index: 80;
+      display:none;
+    }
+
+    /* Small “pulse” */
+    .pulse{
+      display:inline-block;
+      width: 10px; height: 10px; border-radius:999px;
+      background: linear-gradient(90deg, var(--hot), var(--neon));
+      box-shadow: 0 0 22px rgba(255,45,85,.35);
+      animation: beat 1.2s ease-in-out infinite;
+      vertical-align: middle;
+      margin: 0 8px 2px 0;
+    }
+    @keyframes beat{
+      0%,100%{ transform: scale(1); opacity:.85; }
+      50%{ transform: scale(1.35); opacity:1; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg">
+    <div class="blob"></div>
+    <div class="blob b2"></div>
+  </div>
+  <div class="grain"></div>
+
+  <canvas id="confetti"></canvas>
+
+  <main class="wrap">
+    <section class="card" id="inviteCard" aria-label="Melina's birthday invite">
+      <div class="topbar">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <span>invite.exe — neon after hours vibe</span>
+      </div>
+
+      <div class="grid" id="cardInner">
+        <div class="left">
+          <div class="kicker"><span class="pulse"></span> Melina turns <b>20</b></div>
+
+          <h1><span class="glow">You’re invited.</span> ✨</h1>
+          <p class="sub">
+            Wine, snacks, and board games — with late-night neon energy.
+            <br/>Unlock the location by completing the mini-game.
+          </p>
+
+          <div class="info">
+            <div class="pill">
+              <div class="label">Day</div>
+              <div class="value">Saturday, 10 January</div>
+            </div>
+            <div class="pill">
+              <div class="label">Time</div>
+              <div class="value">17:00</div>
+            </div>
+
+            <div class="pill">
+              <div class="label">What to expect</div>
+              <div class="value">Wine • Snacks • Board Games</div>
+            </div>
+
+            <div class="pill locked" id="locationBox">
+              <div class="label">Location (locked)</div>
+              <div class="value">
+                Filippoupoleos 56 (next to Sepolia metro)<br/>
+                <a id="mapLink" href="https://share.google/8tWEwYzo6fyaF4XkA" target="_blank" rel="noopener noreferrer">
+                  Open map ↗
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="btnRow">
+            <button class="btn primary" id="playBtn">Play to unlock location 🎮</button>
+            <button class="btn" id="copyBtn" title="Copy invite text">Copy invite text</button>
+            <button class="btn locked" id="openMapBtn" disabled>Open map ↗</button>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="photo" id="photo">
+            <!-- Put meli.png in the same folder as this HTML -->
+            <img src="meli.png" alt="Melina" />
+          </div>
+
+          <div class="mini">
+            <h3>Optional vibe</h3>
+            <p>
+              Dress code: black / red / neon ✦
+              bring your favorite board game (if you want) 🎲🍷
+            </p>
+          </div>
+
+          <div class="mini">
+            <h3>RSVP</h3>
+            <p>
+              Just message Melina: “I’m in.” (or “I’m bringing a game.”)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span class="pulse"></span>
+        Pro tip: hover the card. It moves. Like the bassline.
+      </div>
+    </section>
+  </main>
+
+  <!-- GAME MODAL -->
+  <div class="modalBack" id="modalBack" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Unlock game">
+      <div class="modalHeader">
+        <div class="title">Unlock the Location — 3 quick rounds</div>
+        <button class="x" id="closeModal" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modalBody">
+        <div class="step" id="step1">
+          <h4>Round 1 — Choose the vibe color</h4>
+          <div>Pick the most “neon night” option:</div>
+          <div class="choices">
+            <button class="btn" data-q="1" data-a="0">Pastel beige</button>
+            <button class="btn" data-q="1" data-a="1">Neon red</button>
+            <button class="btn" data-q="1" data-a="0">Office gray</button>
+          </div>
+        </div>
+
+        <div class="step" id="step2">
+          <h4>Round 2 — What are we doing?</h4>
+          <div>Choose the correct lineup:</div>
+          <div class="choices">
+            <button class="btn" data-q="2" data-a="0">Karaoke only</button>
+            <button class="btn" data-q="2" data-a="1">Wine + snacks + board games</button>
+            <button class="btn" data-q="2" data-a="0">Gym session</button>
+          </div>
+        </div>
+
+        <div class="step" id="step3">
+          <h4>Round 3 — Time check</h4>
+          <div>When does it start?</div>
+          <div class="choices">
+            <button class="btn" data-q="3" data-a="0">15:00</button>
+            <button class="btn" data-q="3" data-a="1">17:00</button>
+            <button class="btn" data-q="3" data-a="0">21:00</button>
+          </div>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top: 8px;">
+          <button class="btn primary" id="resetGame">Reset</button>
+          <button class="btn" id="hintBtn">Hint</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---- Card tilt on hover (no libraries) ----
+    const card = document.getElementById('inviteCard');
+    const photo = document.getElementById('photo');
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;   // 0..1
+      const y = (e.clientY - r.top) / r.height;   // 0..1
+      const rx = clamp((0.5 - y) * 10, -10, 10);
+      const ry = clamp((x - 0.5) * 12, -12, 12);
+      card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
+      photo.style.transform = `translateZ(40px) rotateX(${rx*0.6}deg) rotateY(${ry*0.6}deg)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0px)';
+      photo.style.transform = 'translateZ(40px)';
+    });
+
+    // ---- Modal / Game ----
+    const modalBack = document.getElementById('modalBack');
+    const playBtn = document.getElementById('playBtn');
+    const closeModal = document.getElementById('closeModal');
+    const resetGameBtn = document.getElementById('resetGame');
+    const hintBtn = document.getElementById('hintBtn');
+    const statusEl = document.getElementById('status');
+
+    const locationBox = document.getElementById('locationBox');
+    const openMapBtn = document.getElementById('openMapBtn');
+    const mapLink = document.getElementById('mapLink');
+
+    const state = { q1:false, q2:false, q3:false, unlocked:false };
+
+    function showModal(){
+      modalBack.classList.add('show');
+      modalBack.setAttribute('aria-hidden', 'false');
+      statusEl.textContent = "Pick the right answers to unlock the address.";
+    }
+    function hideModal(){
+      modalBack.classList.remove('show');
+      modalBack.setAttribute('aria-hidden', 'true');
+    }
+
+    playBtn.addEventListener('click', showModal);
+    closeModal.addEventListener('click', hideModal);
+    modalBack.addEventListener('click', (e) => { if(e.target === modalBack) hideModal(); });
+
+    // Answer buttons
+    modalBack.querySelectorAll('button[data-q]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const q = btn.getAttribute('data-q');
+        const a = btn.getAttribute('data-a') === '1';
+        state['q'+q] = a;
+
+        // tiny feedback
+        btn.style.borderColor = a ? 'rgba(53,214,255,.55)' : 'rgba(255,45,85,.55)';
+        btn.style.boxShadow = a ? '0 0 24px rgba(53,214,255,.10)' : '0 0 24px rgba(255,45,85,.10)';
+
+        checkWin();
+      });
+    });
+
+    function checkWin(){
+      if(state.unlocked) return;
+
+      const correct = state.q1 && state.q2 && state.q3;
+      const answered = (state.q1 !== false) || (state.q2 !== false) || (state.q3 !== false);
+
+      if(correct){
+        unlockInvite();
+        statusEl.textContent = "Unlocked. See you there ✨";
+        setTimeout(hideModal, 650);
+      } else {
+        // If they clicked something wrong, keep it playful
+        statusEl.textContent = answered ? "Not quite — adjust your choices 😈" : "Pick the right answers to unlock.";
+      }
+    }
+
+    function unlockInvite(){
+      state.unlocked = true;
+      document.body.classList.add('unlocked');
+      locationBox.classList.remove('locked');
+      locationBox.querySelector('.label').textContent = "Location (unlocked)";
+      openMapBtn.classList.remove('locked');
+      openMapBtn.disabled = false;
+
+      // confetti burst
+      confettiBurst();
+    }
+
+    resetGameBtn.addEventListener('click', () => {
+      state.q1 = state.q2 = state.q3 = false;
+      state.unlocked = false;
+      document.body.classList.remove('unlocked');
+
+      locationBox.classList.add('locked');
+      locationBox.querySelector('.label').textContent = "Location (locked)";
+      openMapBtn.classList.add('locked');
+      openMapBtn.disabled = true;
+
+      statusEl.textContent = "Reset. Try again.";
+      // reset button styles
+      modalBack.querySelectorAll('button[data-q]').forEach(b=>{
+        b.style.borderColor = 'rgba(255,255,255,.14)';
+        b.style.boxShadow = 'none';
+      });
+    });
+
+    hintBtn.addEventListener('click', () => {
+      statusEl.textContent = "Hint: neon red + wine/snacks/board games + 17:00.";
+    });
+
+    openMapBtn.addEventListener('click', () => {
+      window.open(mapLink.href, '_blank', 'noopener,noreferrer');
+    });
+
+    // ---- Copy invite text ----
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.addEventListener('click', async () => {
+      const text =
+`MELINA TURNS 20 ✨
+Saturday, 10 January — 17:00
+Wine • Snacks • Board Games
+Location: Filippoupoleos 56 (next to Sepolia metro)
+Map: https://share.google/8tWEwYzo6fyaF4XkA`;
+
+      try{
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = "Copied ✔";
+        setTimeout(()=> copyBtn.textContent = "Copy invite text", 1200);
+      }catch(e){
+        // fallback
+        prompt("Copy this text:", text);
+      }
+    });
+
+    // ---- Confetti (simple canvas) ----
+    const confettiCanvas = document.getElementById('confetti');
+    const ctx = confettiCanvas.getContext('2d');
+    let confetti = [];
+    let animId = null;
+
+    function resizeCanvas(){
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function confettiBurst(){
+      confettiCanvas.style.display = 'block';
+      const n = 140;
+      const cx = window.innerWidth * 0.5;
+      const cy = window.innerHeight * 0.2;
+
+      confetti = [];
+      for(let i=0;i<n;i++){
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 3 + Math.random() * 6;
+        confetti.push({
+          x: cx,
+          y: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 2,
+          g: 0.10 + Math.random() * 0.08,
+          size: 3 + Math.random() * 4,
+          rot: Math.random() * Math.PI,
+          vr: (Math.random() - 0.5) * 0.2,
+          life: 120 + Math.random() * 40
+        });
+      }
+
+      let frame = 0;
+      cancelAnimationFrame(animId);
+      function tick(){
+        frame++;
+        ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+
+        confetti.forEach(p => {
+          p.vy += p.g;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          p.life -= 1;
+
+          // draw small rotated rectangles (no fixed colors; gradient-ish via alpha)
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.globalAlpha = Math.max(0, p.life / 160);
+          ctx.fillStyle = "rgba(255,255,255,0.9)";
+          ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size*1.6);
+          ctx.restore();
+        });
+
+        confetti = confetti.filter(p => p.life > 0 && p.y < window.innerHeight + 60);
+
+        if(frame < 220 && confetti.length){
+          animId = requestAnimationFrame(tick);
+        } else {
+          ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+          confettiCanvas.style.display = 'none';
+        }
+      }
+      tick();
+    }
+  </script>
+</body>
+</html>
