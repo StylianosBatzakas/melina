@@ -15,31 +15,28 @@
       --hot:#ff2d55;
       --neon:#b700ff;
       --cyan:#35d6ff;
-      --amber:#ffb000;
       --shadow: 0 22px 70px rgba(0,0,0,0.65);
       --radius: 28px;
     }
 
     *{ box-sizing:border-box; }
-    html, body { height:100%; }
+    html, body { height: 100%; }
+
     body{
-  margin:0;
-  color:var(--text);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-  background: radial-gradient(1200px 700px at 20% 10%, rgba(255,45,85,0.22), transparent 55%),
-              radial-gradient(900px 650px at 85% 15%, rgba(183,0,255,0.18), transparent 55%),
-              radial-gradient(900px 650px at 70% 90%, rgba(53,214,255,0.12), transparent 55%),
-              linear-gradient(180deg, #05050a, #07070b 35%, #04040a);
-  overflow-x:hidden;
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(255,45,85,0.22), transparent 55%),
+                  radial-gradient(900px 650px at 85% 15%, rgba(183,0,255,0.18), transparent 55%),
+                  radial-gradient(900px 650px at 70% 90%, rgba(53,214,255,0.12), transparent 55%),
+                  linear-gradient(180deg, #05050a, #07070b 35%, #04040a);
+      overflow-x: hidden;
+      display: block;
 
-  /* IMPORTANT: no more center-flex on mobile webviews */
-  display:block;
-
-  /* safe padding for IG / iOS */
-  min-height: 100svh;
-  padding: calc(14px + env(safe-area-inset-top)) 12px calc(24px + env(safe-area-inset-bottom));
-}
-
+      /* IG/iOS safe areas + give room so top UI doesn't eat content */
+      min-height: 100svh;
+      padding: calc(18px + env(safe-area-inset-top) + 80px) 12px calc(28px + env(safe-area-inset-bottom));
+    }
 
     /* Ambient animated blobs */
     .bg{
@@ -70,45 +67,6 @@
       from{ transform: translate3d(-10%, -8%, 0) scale(1); }
       to  { transform: translate3d(4%, 6%, 0) scale(1.08); }
     }
-@media (max-width: 520px){
-  .wrap{ width:100%; }
-  .card{ border-radius: 22px; }
- .modal{ border-radius: 18px; }
-  .modalHeader{ position: sticky; top: 0; background: rgba(12,10,18,0.92); z-index: 2; }
-  .heroStrip{ height: 34px; }
-
-  .topbar{ padding: 12px 14px; }
-  .grid{ padding: 14px; gap: 14px; }
-
-  h1{ font-size: 34px; line-height: 1.06; }
-  .sub{ font-size: 14.5px; line-height: 1.55; margin-bottom: 12px; }
-
-  .info{ grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
-  .pill{ padding: 12px 12px; border-radius: 14px; }
-  .pill .value{ font-size: 14.5px; }
-
-  .btnRow{ flex-direction: column; align-items: stretch; gap: 10px; margin-top: 12px; }
-  .btn{ width: 100%; padding: 12px 14px; border-radius: 14px; }
-
-  .right{ padding: 0; }
-  .photo{
-    transform: none !important;
-    border-radius: 18px;
-    padding: 8px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .photo img{
-    width: 100%;
-    max-height: 45vh;
-    object-fit: contain;
-    border-radius: 14px;
-  }
-
-  /* blur on mobile looks awful */
-  .locked{ filter: none; opacity: .55; }
-}
 
     /* Grain overlay */
     .grain{
@@ -123,6 +81,7 @@
     .wrap{
       width: min(980px, 100%);
       position:relative;
+      margin: 0 auto;
     }
 
     .card{
@@ -136,13 +95,21 @@
       transition: transform .18s ease, box-shadow .18s ease;
       position:relative;
     }
-
     .card::before{
       content:"";
       position:absolute; inset:-2px;
       background: linear-gradient(135deg, rgba(255,45,85,.65), rgba(183,0,255,.30), rgba(53,214,255,.20));
       opacity:.14;
       pointer-events:none;
+    }
+
+    .heroStrip{
+      height: 26px;
+      background:
+        radial-gradient(800px 180px at 15% 50%, rgba(255,45,85,.35), transparent 60%),
+        radial-gradient(700px 180px at 85% 50%, rgba(183,0,255,.25), transparent 60%),
+        linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+      border-bottom: 1px solid rgba(255,255,255,.06);
     }
 
     .topbar{
@@ -203,7 +170,9 @@
       position:relative;
       z-index:1;
     }
-    
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; padding: 18px; }
+    }
 
     .kicker{
       display:inline-flex;
@@ -232,7 +201,6 @@
       font-size: clamp(30px, 5vw, 56px);
       line-height: 1.05;
       letter-spacing: -0.02em;
-      word-break: normal;
     }
     h1 .glow{
       background: linear-gradient(90deg, #fff, rgba(255,255,255,.72));
@@ -256,7 +224,9 @@
       gap: 12px;
       margin-top: 16px;
     }
-   
+    @media (max-width: 520px){
+      .info{ grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+    }
 
     .pill{
       padding: 12px 14px;
@@ -265,10 +235,13 @@
       border: 1px solid rgba(255,255,255,.09);
       transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
     }
-
-    /* Hover effects only for devices that actually have hover */
-   
-
+    @media (hover:hover){
+      .pill:hover{
+        transform: translateY(-2px);
+        border-color: rgba(255,45,85,.35);
+        box-shadow: 0 14px 30px rgba(0,0,0,.35);
+      }
+    }
     .pill .label{
       font-size: 12px;
       letter-spacing: .12em;
@@ -282,7 +255,6 @@
       line-height: 1.35;
     }
 
-    /* Buttons */
     .btnRow{
       margin-top: 16px;
       display:flex;
@@ -303,7 +275,7 @@
       position:relative;
       overflow:hidden;
       user-select:none;
-      text-decoration:none; /* for <a class="btn"> */
+      text-decoration:none;
       display:inline-flex;
       align-items:center;
       justify-content:center;
@@ -313,15 +285,20 @@
       content:"";
       position:absolute; inset:-2px;
       background: linear-gradient(135deg, rgba(255,45,85,.35), rgba(183,0,255,.20), rgba(53,214,255,.16));
-      opacity:.0;
+      opacity:0;
       transition: opacity .15s ease;
       pointer-events:none;
     }
-
-   
-
+    @media (hover:hover){
+      .btn:hover{
+        transform: translateY(-2px);
+        border-color: rgba(255,45,85,.45);
+        box-shadow: 0 16px 36px rgba(0,0,0,.42);
+        background: rgba(0,0,0,.30);
+      }
+      .btn:hover::before{ opacity:.35; }
+    }
     .btn:active{ transform: translateY(0px) scale(.99); }
-
     .btn.primary{
       border-color: rgba(255,45,85,.35);
       background: linear-gradient(135deg, rgba(255,45,85,.30), rgba(183,0,255,.16), rgba(0,0,0,.22));
@@ -337,7 +314,6 @@
       text-shadow: 0 0 16px rgba(255,45,85,.22);
     }
 
-    /* Right column */
     .right{
       display:flex;
       flex-direction:column;
@@ -353,6 +329,10 @@
       position:relative;
       transform: translateZ(40px);
       transition: transform .18s ease;
+      padding: 10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
     .photo::after{
       content:"";
@@ -363,7 +343,12 @@
       pointer-events:none;
       mix-blend-mode: screen;
     }
-    .photo img{ display:block; width:100%; height:auto; }
+    .photo img{
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius: 14px;
+    }
 
     .mini{
       padding: 14px 14px;
@@ -373,10 +358,7 @@
       transition: transform .15s ease, border-color .15s ease;
     }
     @media (hover:hover){
-      .mini:hover{
-        transform: translateY(-2px);
-        border-color: rgba(53,214,255,.28);
-      }
+      .mini:hover{ transform: translateY(-2px); border-color: rgba(53,214,255,.28); }
     }
     .mini h3{
       margin: 0 0 8px;
@@ -415,40 +397,48 @@
       opacity:1;
       pointer-events:auto;
     }
+    @media (max-width: 520px){
+      .locked{ filter:none; opacity:.55; }
+    }
 
-    /* Modal */
+    /* ===== MODAL (SCROLL FIX) ===== */
     .modalBack{
-  position:fixed;
-  inset:0;
-  background: rgba(0,0,0,.62);
-  backdrop-filter: blur(10px);
-  display:none;
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(10px);
+      display:none;
 
-  /* IMPORTANT: allow scrolling in small screens */
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+      /* allow scrolling / swipe in IG */
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
 
-  /* top aligned so it can scroll naturally */
-  align-items:flex-start;
-  justify-content:center;
+      /* align at top so it can scroll naturally */
+      align-items:flex-start;
+      justify-content:center;
 
-  padding: calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));
-  z-index: 50;
-}
-.modalBack.show{ display:flex; }
-
+      padding: calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));
+      z-index: 50;
+    }
     .modalBack.show{ display:flex; }
 
     .modal{
       width: min(720px, 100%);
-  max-height: calc(100svh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      height: calc(100svh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      max-height: calc(100svh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+
       background: rgba(12, 10, 18, 0.82);
       border: 1px solid rgba(255,255,255,.12);
       border-radius: 22px;
       box-shadow: 0 22px 70px rgba(0,0,0,.7);
       overflow:hidden;
       position:relative;
+
+      display:flex;
+      flex-direction:column;
     }
+
     .modalHeader{
       padding: 14px 16px;
       border-bottom: 1px solid rgba(255,255,255,.10);
@@ -477,11 +467,13 @@
     }
 
     .modalBody{
-  padding: 16px 16px 18px;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  max-height: calc(100svh - 120px);
-}
+      padding: 16px 16px 18px;
+
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      min-height: 0; /* IMPORTANT for flex scroll */
+    }
 
     .step{
       border: 1px solid rgba(255,255,255,.10);
@@ -503,7 +495,6 @@
       gap: 10px;
       margin-top: 10px;
     }
-
     .status{
       margin-top: 10px;
       color: rgba(255,255,255,.72);
@@ -519,7 +510,7 @@
       display:none;
     }
 
-    /* Small “pulse” */
+    /* Pulse dot */
     .pulse{
       display:inline-block;
       width: 10px; height: 10px; border-radius:999px;
@@ -535,126 +526,35 @@
     }
 
     /* Mobile polish */
-   
-/* iOS/IG webview: καλύτερο “100vh” */
-body{
-  min-height: 100svh;              /* modern */
-  min-height: 100dvh;              /* fallback */
-  padding-top: calc(18px + env(safe-area-inset-top));
-  padding-right: 12px;
-  padding-left: 12px;
-  padding-bottom: calc(28px + env(safe-area-inset-bottom));
-}
+    @media (max-width: 520px){
+      body{
+        padding: calc(14px + env(safe-area-inset-top) + 64px) 12px calc(22px + env(safe-area-inset-bottom));
+      }
+      .card{ border-radius: 22px; }
+      .heroStrip{ height: 34px; }
+      .topbar{ padding: 12px 14px; }
+      .grid{ padding: 14px; gap: 14px; }
+      h1{ font-size: 34px; line-height: 1.06; }
+      .sub{ font-size: 14.5px; line-height: 1.55; margin-bottom: 12px; }
+      .btnRow{ flex-direction: column; align-items: stretch; gap: 10px; margin-top: 12px; }
+      .btn{ width: 100%; padding: 12px 14px; border-radius: 14px; }
+      .right{ padding: 0; }
+      .photo{ transform: none !important; border-radius: 18px; padding: 8px; }
+      .photo img{ max-height: 45vh; object-fit: contain; border-radius: 14px; }
+      .mini{ padding: 12px 12px; border-radius: 14px; }
+      .footer{ padding: 12px 14px 16px; }
+      .modal{ border-radius: 18px; }
+      .modalHeader{ position: sticky; top: 0; background: rgba(12,10,18,0.92); z-index: 2; }
+    }
 
-/* Η κάρτα να μην κολλάει/μην γίνεται “τεράστια” σε mobile */
-.wrap{ width: 100%; }
-.card{
-  width: 100%;
-  border-radius: 22px;
-}
-.heroStrip{
-  height: 26px;
-  background:
-    radial-gradient(800px 180px at 15% 50%, rgba(255,45,85,.35), transparent 60%),
-    radial-gradient(700px 180px at 85% 50%, rgba(183,0,255,.25), transparent 60%),
-    linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,0));
-  border-bottom: 1px solid rgba(255,255,255,.06);
-}
-
-/* Πιο compact layout */
-
-  /* Τίτλοι/κείμενα πιο “mobile” */
-  h1{ font-size: 34px; line-height: 1.05; }
-  .sub{ font-size: 14.5px; line-height: 1.55; margin-bottom: 12px; }
-
-  /* Boxes σε 1 στήλη (πιο ωραίο στο κινητό) */
-  .info{ grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
-  .pill{ padding: 12px 12px; border-radius: 14px; }
-  .pill .value{ font-size: 14.5px; }
-
-  /* Buttons full width, πιο “καθαρά” */
-  .btnRow{ flex-direction: column; align-items: stretch; gap: 10px; margin-top: 12px; }
-  .btn{ width: 100%; padding: 12px 14px; border-radius: 14px; }
-
-  /* Η εικόνα να μην τρώει υπερβολικό χώρο */
-  .right{ padding: 0; }
-  .photo{
-    border-radius: 18px;
-    transform: none !important;
-  }
-
-  /* Μην αφήνει την εικόνα να γίνεται “γίγαντας” */
-  .photo img{
-    width: 100%;
-    height: auto;
-    max-height: 52vh;   /* <- αυτό φτιάχνει το “άσχημο” που βλέπεις */
-    object-fit: contain;
-  }
-
-  .mini{ padding: 12px 12px; border-radius: 14px; }
-  .footer{ padding: 12px 14px 16px; }
-}
-
-/* Locked blur σε mobile βγαίνει “χάλι”/θολώνει όλη τη σελίδα */
-
-
-/* Backdrop-filter σε IG webview καμιά φορά lag/σπάει: πιο σταθερό */
-@supports not (backdrop-filter: blur(1px)){
-  .card{ background: rgba(12, 10, 18, 0.88); }
-}
-
-/* ===== END MOBILE FIX PACK ===== */
-.photo{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding: 10px;
-}
-.photo img{
-  border-radius: 14px;
-}
-/* ===== IG FIX: fixed top cover so nothing gets cut ===== */
-:root { --topCoverH: 10px; } /* δοκίμασε 84, αν θες πιο κάτω κάντο 100 */
-
-.topCover{
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: calc(var(--topCoverH) + env(safe-area-inset-top));
-  z-index: 9999;
-  pointer-events: none;
-
-  /* “image-like” neon header */
-  background:
-    radial-gradient(900px 180px at 20% 10%, rgba(255,45,85,.55), transparent 60%),
-    radial-gradient(900px 180px at 85% 30%, rgba(183,0,255,.40), transparent 62%),
-    linear-gradient(180deg, rgba(5,5,10,0.95) 0%, rgba(5,5,10,0.65) 55%, rgba(5,5,10,0.00) 100%);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-/* push everything down ALWAYS */
-body{
-  padding-top: calc(var(--topCoverH) + env(safe-area-inset-top) + 10px) !important;
-  align-items: flex-start !important;
-  justify-content: flex-start !important;
-}
-
-/* keep card visible and not stuck under the cover */
-.wrap{
-  width: 100%;
-  margin: 0 auto;
-}
-
-/* Mobile tighten */
-@media (max-width: 520px){
-  :root { --topCoverH: 96px; } /* σε κινητό λίγο μεγαλύτερο */
-}
-
+    @supports not (backdrop-filter: blur(1px)){
+      .card{ background: rgba(12, 10, 18, 0.88); }
+      .modal{ background: rgba(12, 10, 18, 0.92); }
+    }
   </style>
 </head>
 
 <body>
-  <div class="topCover" aria-hidden="true"></div>
   <div class="bg">
     <div class="blob"></div>
     <div class="blob b2"></div>
@@ -666,10 +566,10 @@ body{
   <main class="wrap">
     <section class="card" id="inviteCard" aria-label="Melina's birthday invite">
       <div class="heroStrip" aria-hidden="true"></div>
+
       <div class="topbar">
         <div class="dot"></div><div class="dot"></div><div class="dot"></div>
 
-        <!-- TOP RIGHT LINKS + LEFT LABEL -->
         <div class="bar">
           <span>invite.exe — neon after hours vibe</span>
 
@@ -722,7 +622,6 @@ body{
           </div>
 
           <div class="btnRow">
-            <!-- NEW: PLAY BUTTON -->
             <a class="btn" href="https://open.spotify.com/album/2YHC9dhR9vMTdCeY0T1FOs" target="_blank" rel="noopener noreferrer">
               ▶ Play House Of Balloons
             </a>
@@ -776,7 +675,7 @@ body{
           <div>Pick the most “House of Balloons” option:</div>
           <div class="choices">
             <button class="btn" data-q="1" data-a="0">Pastel beige</button>
-            <button class="btn" data-q="1" data-a="1">Black & White </button>
+            <button class="btn" data-q="1" data-a="1">Black & White</button>
             <button class="btn" data-q="1" data-a="0">Office gray</button>
           </div>
         </div>
@@ -812,24 +711,9 @@ body{
   </div>
 
   <script>
-    // Force top on load (Instagram in-app browser often restores scroll weirdly)
-function forceTop(){
-  window.scrollTo(0,0);
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-}
-window.addEventListener('pageshow', () => {
-  forceTop();
-  setTimeout(forceTop, 60);
-  setTimeout(forceTop, 250);
-  setTimeout(forceTop, 800);
-});
-
-
     // ---- Card tilt on hover (disable on touch devices) ----
     const card = document.getElementById('inviteCard');
     const photo = document.getElementById('photo');
-
     const canHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
 
     function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
@@ -837,8 +721,8 @@ window.addEventListener('pageshow', () => {
     if (canHover) {
       card.addEventListener('mousemove', (e) => {
         const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width;   // 0..1
-        const y = (e.clientY - r.top) / r.height;   // 0..1
+        const x = (e.clientX - r.left) / r.width;
+        const y = (e.clientY - r.top) / r.height;
         const rx = clamp((0.5 - y) * 10, -10, 10);
         const ry = clamp((x - 0.5) * 12, -12, 12);
         card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
@@ -869,10 +753,16 @@ window.addEventListener('pageshow', () => {
       modalBack.classList.add('show');
       modalBack.setAttribute('aria-hidden', 'false');
       statusEl.textContent = "Pick the right answers to unlock the address.";
+
+      // Lock background scroll (helps IG)
+      document.body.style.overflow = 'hidden';
     }
     function hideModal(){
       modalBack.classList.remove('show');
       modalBack.setAttribute('aria-hidden', 'true');
+
+      // Restore background scroll
+      document.body.style.overflow = '';
     }
 
     playBtn.addEventListener('click', showModal);
@@ -915,7 +805,6 @@ window.addEventListener('pageshow', () => {
       locationBox.querySelector('.label').textContent = "Location (unlocked)";
       openMapBtn.classList.remove('locked');
       openMapBtn.disabled = false;
-
       confettiBurst();
     }
 
@@ -937,7 +826,7 @@ window.addEventListener('pageshow', () => {
     });
 
     hintBtn.addEventListener('click', () => {
-      statusEl.textContent = "Hint: neon red + wine/snacks/board games + 17:00.";
+      statusEl.textContent = "Hint: black & white + wine/snacks/board games + 17:00.";
     });
 
     openMapBtn.addEventListener('click', () => {
@@ -1034,11 +923,3 @@ Map: https://share.google/8tWEwYzo6fyaF4XkA`;
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
