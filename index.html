@@ -73,7 +73,8 @@
 @media (max-width: 520px){
   .wrap{ width:100%; }
   .card{ border-radius: 22px; }
-
+ .modal{ border-radius: 18px; }
+  .modalHeader{ position: sticky; top: 0; background: rgba(12,10,18,0.92); z-index: 2; }
   .heroStrip{ height: 34px; }
 
   .topbar{ padding: 12px 14px; }
@@ -417,19 +418,30 @@
 
     /* Modal */
     .modalBack{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.62);
-      backdrop-filter: blur(10px);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 18px;
-      z-index: 50;
-    }
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,.62);
+  backdrop-filter: blur(10px);
+  display:none;
+
+  /* IMPORTANT: allow scrolling in small screens */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* top aligned so it can scroll naturally */
+  align-items:flex-start;
+  justify-content:center;
+
+  padding: calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));
+  z-index: 50;
+}
+.modalBack.show{ display:flex; }
+
     .modalBack.show{ display:flex; }
 
     .modal{
       width: min(720px, 100%);
+  max-height: calc(100svh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
       background: rgba(12, 10, 18, 0.82);
       border: 1px solid rgba(255,255,255,.12);
       border-radius: 22px;
@@ -465,8 +477,12 @@
     }
 
     .modalBody{
-      padding: 16px 16px 18px;
-    }
+  padding: 16px 16px 18px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(100svh - 120px);
+}
+
     .step{
       border: 1px solid rgba(255,255,255,.10);
       border-radius: 16px;
@@ -1018,6 +1034,7 @@ Map: https://share.google/8tWEwYzo6fyaF4XkA`;
   </script>
 </body>
 </html>
+
 
 
 
