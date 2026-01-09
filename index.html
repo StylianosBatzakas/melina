@@ -597,11 +597,48 @@ body{
 .photo img{
   border-radius: 14px;
 }
+/* ===== IG FIX: fixed top cover so nothing gets cut ===== */
+:root { --topCoverH: 84px; } /* δοκίμασε 84, αν θες πιο κάτω κάντο 100 */
+
+.topCover{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: calc(var(--topCoverH) + env(safe-area-inset-top));
+  z-index: 9999;
+  pointer-events: none;
+
+  /* “image-like” neon header */
+  background:
+    radial-gradient(900px 180px at 20% 10%, rgba(255,45,85,.55), transparent 60%),
+    radial-gradient(900px 180px at 85% 30%, rgba(183,0,255,.40), transparent 62%),
+    linear-gradient(180deg, rgba(5,5,10,0.95) 0%, rgba(5,5,10,0.65) 55%, rgba(5,5,10,0.00) 100%);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* push everything down ALWAYS */
+body{
+  padding-top: calc(var(--topCoverH) + env(safe-area-inset-top) + 10px) !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+}
+
+/* keep card visible and not stuck under the cover */
+.wrap{
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Mobile tighten */
+@media (max-width: 520px){
+  :root { --topCoverH: 96px; } /* σε κινητό λίγο μεγαλύτερο */
+}
 
   </style>
 </head>
 
 <body>
+  <div class="topCover" aria-hidden="true"></div>
   <div class="bg">
     <div class="blob"></div>
     <div class="blob b2"></div>
@@ -981,6 +1018,7 @@ Map: https://share.google/8tWEwYzo6fyaF4XkA`;
   </script>
 </body>
 </html>
+
 
 
 
