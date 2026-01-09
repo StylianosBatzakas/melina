@@ -505,6 +505,86 @@
       .footer{ padding: 14px 16px 18px; }
       .photo{ transform: none; }
     }
+    /* ===== MOBILE FIX PACK (Instagram/Safari/Chrome) ===== */
+
+/* iOS/IG webview: καλύτερο “100vh” */
+body{
+  min-height: 100svh;              /* modern */
+  min-height: 100dvh;              /* fallback */
+  padding: 16px 12px calc(28px + env(safe-area-inset-bottom));
+}
+
+/* Η κάρτα να μην κολλάει/μην γίνεται “τεράστια” σε mobile */
+.wrap{ width: 100%; }
+.card{
+  width: 100%;
+  border-radius: 22px;
+}
+
+/* Πιο compact layout */
+@media (max-width: 520px){
+  .topbar{ padding: 12px 14px; }
+  .grid{
+    padding: 14px;
+    gap: 14px;
+  }
+
+  /* Τίτλοι/κείμενα πιο “mobile” */
+  h1{ font-size: 34px; line-height: 1.05; }
+  .sub{ font-size: 14.5px; line-height: 1.55; margin-bottom: 12px; }
+
+  /* Boxes σε 1 στήλη (πιο ωραίο στο κινητό) */
+  .info{ grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+  .pill{ padding: 12px 12px; border-radius: 14px; }
+  .pill .value{ font-size: 14.5px; }
+
+  /* Buttons full width, πιο “καθαρά” */
+  .btnRow{ flex-direction: column; align-items: stretch; gap: 10px; margin-top: 12px; }
+  .btn{ width: 100%; padding: 12px 14px; border-radius: 14px; }
+
+  /* Η εικόνα να μην τρώει υπερβολικό χώρο */
+  .right{ padding: 0; }
+  .photo{
+    border-radius: 18px;
+    transform: none !important;
+  }
+
+  /* Μην αφήνει την εικόνα να γίνεται “γίγαντας” */
+  .photo img{
+    width: 100%;
+    height: auto;
+    max-height: 52vh;   /* <- αυτό φτιάχνει το “άσχημο” που βλέπεις */
+    object-fit: contain;
+  }
+
+  .mini{ padding: 12px 12px; border-radius: 14px; }
+  .footer{ padding: 12px 14px 16px; }
+}
+
+/* Locked blur σε mobile βγαίνει “χάλι”/θολώνει όλη τη σελίδα */
+@media (max-width: 520px){
+  .locked{
+    filter: none;
+    opacity: .55;
+  }
+}
+
+/* Backdrop-filter σε IG webview καμιά φορά lag/σπάει: πιο σταθερό */
+@supports not (backdrop-filter: blur(1px)){
+  .card{ background: rgba(12, 10, 18, 0.88); }
+}
+
+/* ===== END MOBILE FIX PACK ===== */
+.photo{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 10px;
+}
+.photo img{
+  border-radius: 14px;
+}
+
   </style>
 </head>
 
@@ -873,3 +953,4 @@ Map: https://share.google/8tWEwYzo6fyaF4XkA`;
   </script>
 </body>
 </html>
+
