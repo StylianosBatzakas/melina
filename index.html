@@ -15,15 +15,13 @@
       --hot:#ff2d55;
       --neon:#b700ff;
       --cyan:#35d6ff;
-      --amber:#ffb000;
       --shadow: 0 22px 70px rgba(0,0,0,0.65);
       --radius: 28px;
     }
 
     *{ box-sizing:border-box; }
-    html, body { height:100%; }
+    html, body { height: 100%; }
 
-    /* Make the page scroll reliably in IG webviews */
     body{
       margin:0;
       color:var(--text);
@@ -32,13 +30,12 @@
                   radial-gradient(900px 650px at 85% 15%, rgba(183,0,255,0.18), transparent 55%),
                   radial-gradient(900px 650px at 70% 90%, rgba(53,214,255,0.12), transparent 55%),
                   linear-gradient(180deg, #05050a, #07070b 35%, #04040a);
-      overflow-x:hidden;
-      display:block;
-      min-height: 100svh;
+      overflow-x: hidden;
+      display: block;
 
-      /* Space for the fixed scroll bar + IG chrome */
-      padding: calc(14px + env(safe-area-inset-top) + 56px) 12px
-               calc(24px + env(safe-area-inset-bottom));
+      /* give room for iOS/IG top UI */
+      min-height: 100svh;
+      padding: calc(18px + env(safe-area-inset-top) + 70px) 12px calc(28px + env(safe-area-inset-bottom));
     }
 
     /* Ambient animated blobs */
@@ -98,7 +95,6 @@
       transition: transform .18s ease, box-shadow .18s ease;
       position:relative;
     }
-
     .card::before{
       content:"";
       position:absolute; inset:-2px;
@@ -205,7 +201,6 @@
       font-size: clamp(30px, 5vw, 56px);
       line-height: 1.05;
       letter-spacing: -0.02em;
-      word-break: normal;
     }
     h1 .glow{
       background: linear-gradient(90deg, #fff, rgba(255,255,255,.72));
@@ -230,7 +225,7 @@
       margin-top: 16px;
     }
     @media (max-width: 520px){
-      .info{ grid-template-columns: 1fr; gap:10px; margin-top:12px; }
+      .info{ grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
     }
 
     .pill{
@@ -247,7 +242,6 @@
         box-shadow: 0 14px 30px rgba(0,0,0,.35);
       }
     }
-
     .pill .label{
       font-size: 12px;
       letter-spacing: .12em;
@@ -261,7 +255,6 @@
       line-height: 1.35;
     }
 
-    /* Buttons */
     .btnRow{
       margin-top: 16px;
       display:flex;
@@ -306,7 +299,6 @@
       .btn:hover::before{ opacity:.35; }
     }
     .btn:active{ transform: translateY(0px) scale(.99); }
-
     .btn.primary{
       border-color: rgba(255,45,85,.35);
       background: linear-gradient(135deg, rgba(255,45,85,.30), rgba(183,0,255,.16), rgba(0,0,0,.22));
@@ -322,7 +314,6 @@
       text-shadow: 0 0 16px rgba(255,45,85,.22);
     }
 
-    /* Right column */
     .right{
       display:flex;
       flex-direction:column;
@@ -367,10 +358,7 @@
       transition: transform .15s ease, border-color .15s ease;
     }
     @media (hover:hover){
-      .mini:hover{
-        transform: translateY(-2px);
-        border-color: rgba(53,214,255,.28);
-      }
+      .mini:hover{ transform: translateY(-2px); border-color: rgba(53,214,255,.28); }
     }
     .mini h3{
       margin: 0 0 8px;
@@ -413,28 +401,34 @@
       .locked{ filter:none; opacity:.55; }
     }
 
-    /* Modal */
+    /* ===== MODAL ===== */
     .modalBack{
-      position:fixed; inset:0;
+      position:fixed;
+      inset:0;
       background: rgba(0,0,0,.62);
       backdrop-filter: blur(10px);
       display:none;
+      z-index: 50;
+
+      /* Keep it stable in IG */
+      padding: calc(14px + env(safe-area-inset-top)) 12px calc(14px + env(safe-area-inset-bottom));
       align-items:center;
       justify-content:center;
-      padding: 18px;
-      z-index: 50;
+
+      touch-action: pan-y;
     }
     .modalBack.show{ display:flex; }
 
     .modal{
       width: min(720px, 100%);
-      background: rgba(12, 10, 18, 0.82);
+      background: rgba(12, 10, 18, 0.92);
       border: 1px solid rgba(255,255,255,.12);
       border-radius: 22px;
       box-shadow: 0 22px 70px rgba(0,0,0,.7);
       overflow:hidden;
       position:relative;
     }
+
     .modalHeader{
       padding: 14px 16px;
       border-bottom: 1px solid rgba(255,255,255,.10);
@@ -442,6 +436,7 @@
       align-items:center;
       justify-content:space-between;
       gap: 10px;
+      background: rgba(12,10,18,0.95);
     }
     .modalHeader .title{
       letter-spacing:.14em;
@@ -456,15 +451,23 @@
       border-radius: 12px;
       padding: 8px 10px;
       cursor:pointer;
-      transition: transform .15s ease, border-color .15s ease;
-    }
-    @media (hover:hover){
-      .x:hover{ transform: translateY(-1px); border-color: rgba(255,45,85,.45); }
     }
 
+    /* ===== THIS is the scrollable area (always) ===== */
     .modalBody{
-      padding: 16px 16px 18px;
+      padding: 14px 14px 16px;
+
+      /* fixed height relative to viewport so it ALWAYS scrolls */
+      height: min(68vh, 520px);
+      overflow-y: auto;
+
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+
+      /* iOS/IG: make sure it can scroll */
+      touch-action: pan-y;
     }
+
     .step{
       border: 1px solid rgba(255,255,255,.10);
       border-radius: 16px;
@@ -485,7 +488,6 @@
       gap: 10px;
       margin-top: 10px;
     }
-
     .status{
       margin-top: 10px;
       color: rgba(255,255,255,.72);
@@ -493,7 +495,6 @@
       min-height: 18px;
     }
 
-    /* Confetti canvas */
     canvas#confetti{
       position:fixed; inset:0;
       pointer-events:none;
@@ -501,7 +502,6 @@
       display:none;
     }
 
-    /* Small “pulse” */
     .pulse{
       display:inline-block;
       width: 10px; height: 10px; border-radius:999px;
@@ -516,86 +516,31 @@
       50%{ transform: scale(1.35); opacity:1; }
     }
 
-    /* ===== Sticky scroll bar (Instagram friendly) ===== */
-    .scrollBar{
-      position: fixed;
-      top: calc(10px + env(safe-area-inset-top));
-      left: 10px;
-      right: 10px;
-      z-index: 99999;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      padding: 10px 10px;
-      border-radius: 16px;
-      background: rgba(5,5,10,0.78);
-      border: 1px solid rgba(255,255,255,0.12);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 14px 40px rgba(0,0,0,0.45);
-      opacity: 0;
-      transform: translateY(-8px);
-      transition: opacity .18s ease, transform .18s ease;
-      pointer-events: none;
-    }
-    .scrollBar.show{
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-    .scrollTrack{
-      flex: 1;
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.10);
-      overflow: hidden;
-    }
-    .scrollFill{
-      height: 100%;
-      width: 0%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, rgba(255,45,85,.9), rgba(183,0,255,.65), rgba(53,214,255,.55));
-    }
-    .scrollBtn{
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.25);
-      color: rgba(255,255,255,.92);
-      padding: 10px 12px;
-      border-radius: 14px;
-      font-size: 14px;
-      cursor: pointer;
-      user-select: none;
-    }
     @media (max-width: 520px){
-      .scrollBar{
-        left: 8px;
-        right: 8px;
-        padding: 9px 9px;
-      }
-      .scrollBtn{ padding: 10px 12px; }
-      .btnRow{ flex-direction: column; align-items: stretch; gap: 10px; }
-      .btn{ width:100%; border-radius:14px; }
-      .photo img{ max-height: 45vh; object-fit: contain; }
-      .grid{ padding: 14px; gap: 14px; }
-      .topbar{ padding: 12px 14px; }
-      .sub{ font-size: 14.5px; line-height: 1.55; }
-      h1{ font-size: 34px; line-height: 1.06; }
+      body{ padding: calc(16px + env(safe-area-inset-top) + 58px) 12px calc(22px + env(safe-area-inset-bottom)); }
       .card{ border-radius: 22px; }
-    }
+      .heroStrip{ height: 34px; }
+      .topbar{ padding: 12px 14px; }
+      .grid{ padding: 14px; gap: 14px; }
+      h1{ font-size: 34px; line-height: 1.06; }
+      .sub{ font-size: 14.5px; line-height: 1.55; margin-bottom: 12px; }
+      .btnRow{ flex-direction: column; align-items: stretch; gap: 10px; margin-top: 12px; }
+      .btn{ width: 100%; padding: 12px 14px; border-radius: 14px; }
+      .right{ padding: 0; }
+      .photo{ transform: none !important; border-radius: 18px; padding: 8px; }
+      .photo img{ max-height: 45vh; object-fit: contain; border-radius: 14px; }
+      .mini{ padding: 12px 12px; border-radius: 14px; }
+      .footer{ padding: 12px 14px 16px; }
 
-    @supports not (backdrop-filter: blur(1px)){
-      .card{ background: rgba(12, 10, 18, 0.88); }
-      .scrollBar{ background: rgba(5,5,10,0.88); }
+      /* bigger scroll area on phone */
+      .modalBody{ height: min(72vh, 520px); }
+      .modal{ border-radius: 18px; }
+      .modalHeader{ position: sticky; top: 0; z-index: 2; }
     }
   </style>
 </head>
 
 <body>
-  <!-- Sticky scroll UI -->
-  <div class="scrollBar" id="scrollBar" aria-label="Scroll controls">
-    <div class="scrollTrack"><div class="scrollFill" id="scrollFill"></div></div>
-    <button class="scrollBtn" id="topBtn" type="button" aria-label="Back to top">↑ Top</button>
-  </div>
-
   <div class="bg">
     <div class="blob"></div>
     <div class="blob b2"></div>
@@ -710,7 +655,7 @@
         <button class="x" id="closeModal" aria-label="Close">✕</button>
       </div>
 
-      <div class="modalBody">
+      <div class="modalBody" id="modalScroll">
         <div class="step" id="step1">
           <h4>Round 1 — Choose the vibe color</h4>
           <div>Pick the most “House of Balloons” option:</div>
@@ -747,6 +692,9 @@
           <button class="btn primary" id="resetGame">Reset</button>
           <button class="btn" id="hintBtn">Hint</button>
         </div>
+
+        <!-- Spacer so you ALWAYS feel the scroll -->
+        <div style="height: 28px;"></div>
       </div>
     </div>
   </div>
@@ -778,6 +726,7 @@
 
     // ---- Modal / Game ----
     const modalBack = document.getElementById('modalBack');
+    const modalScroll = document.getElementById('modalScroll');
     const playBtn = document.getElementById('playBtn');
     const closeModal = document.getElementById('closeModal');
     const resetGameBtn = document.getElementById('resetGame');
@@ -793,17 +742,28 @@
     function showModal(){
       modalBack.classList.add('show');
       modalBack.setAttribute('aria-hidden', 'false');
-      statusEl.textContent = "Pick the right answers to unlock the address.";
+      statusEl.textContent = "Scroll inside this box — pick the right answers to unlock the address.";
+
+      // lock background scroll (helps IG)
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+
+      // always start at top of questions
+      modalScroll.scrollTop = 0;
     }
     function hideModal(){
       modalBack.classList.remove('show');
       modalBack.setAttribute('aria-hidden', 'true');
+
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
     }
 
     playBtn.addEventListener('click', showModal);
     closeModal.addEventListener('click', hideModal);
     modalBack.addEventListener('click', (e) => { if(e.target === modalBack) hideModal(); });
 
+    // Answer buttons
     modalBack.querySelectorAll('button[data-q]').forEach(btn => {
       btn.addEventListener('click', () => {
         const q = btn.getAttribute('data-q');
@@ -821,14 +781,13 @@
       if(state.unlocked) return;
 
       const correct = state.q1 && state.q2 && state.q3;
-      const answered = (state.q1 !== false) || (state.q2 !== false) || (state.q3 !== false);
 
       if(correct){
         unlockInvite();
         statusEl.textContent = "Unlocked. See you there ✨";
         setTimeout(hideModal, 650);
       } else {
-        statusEl.textContent = answered ? "Not quite — adjust your choices 😈" : "Pick the right answers to unlock.";
+        statusEl.textContent = "Not quite — adjust your choices 😈 (scroll if needed)";
       }
     }
 
@@ -857,6 +816,9 @@
         b.style.borderColor = 'rgba(255,255,255,.14)';
         b.style.boxShadow = 'none';
       });
+
+      // keep it scrollable and reset position
+      modalScroll.scrollTop = 0;
     });
 
     hintBtn.addEventListener('click', () => {
@@ -954,48 +916,6 @@ Map: https://share.google/8tWEwYzo6fyaF4XkA`;
       }
       tick();
     }
-
-    // ===== Sticky scroll bar logic (IG-friendly) =====
-    const scrollBar = document.getElementById('scrollBar');
-    const scrollFill = document.getElementById('scrollFill');
-    const topBtn = document.getElementById('topBtn');
-
-    function updateScrollUI(){
-      const doc = document.documentElement;
-      const scrollTop = (window.pageYOffset || doc.scrollTop || document.body.scrollTop || 0);
-      const scrollHeight = (doc.scrollHeight - doc.clientHeight) || 1;
-      const progress = Math.max(0, Math.min(1, scrollTop / scrollHeight));
-
-      scrollFill.style.width = (progress * 100).toFixed(1) + "%";
-
-      if(scrollTop > 40){
-        scrollBar.classList.add('show');
-      } else {
-        scrollBar.classList.remove('show');
-      }
-    }
-
-    window.addEventListener('scroll', updateScrollUI, { passive: true });
-    window.addEventListener('resize', updateScrollUI);
-    updateScrollUI();
-
-    function goTop(){
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }
-
-    topBtn.addEventListener('click', goTop);
-
-    // If IG opens mid-page, nudge to top once
-    window.addEventListener('pageshow', () => {
-      setTimeout(() => {
-        const doc = document.documentElement;
-        const st = (window.pageYOffset || doc.scrollTop || document.body.scrollTop || 0);
-        if(st > 60) goTop();
-      }, 200);
-    });
   </script>
 </body>
 </html>
-
