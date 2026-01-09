@@ -584,6 +584,12 @@ body{
 .photo img{
   border-radius: 14px;
 }
+body{
+  padding-top: calc(18px + env(safe-area-inset-top));
+  padding-right: 12px;
+  padding-left: 12px;
+  padding-bottom: calc(28px + env(safe-area-inset-bottom));
+}
 
   </style>
 </head>
@@ -745,6 +751,12 @@ body{
   </div>
 
   <script>
+    // Force top on load (Instagram in-app browser often restores scroll weirdly)
+window.addEventListener('load', () => {
+  setTimeout(() => window.scrollTo(0, 0), 0);
+  setTimeout(() => window.scrollTo(0, 0), 250);
+});
+
     // ---- Card tilt on hover (disable on touch devices) ----
     const card = document.getElementById('inviteCard');
     const photo = document.getElementById('photo');
@@ -953,4 +965,5 @@ Map: https://share.google/8tWEwYzo6fyaF4XkA`;
   </script>
 </body>
 </html>
+
 
