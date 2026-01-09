@@ -511,7 +511,10 @@
 body{
   min-height: 100svh;              /* modern */
   min-height: 100dvh;              /* fallback */
-  padding: 16px 12px calc(28px + env(safe-area-inset-bottom));
+  padding-top: calc(18px + env(safe-area-inset-top));
+  padding-right: 12px;
+  padding-left: 12px;
+  padding-bottom: calc(28px + env(safe-area-inset-bottom));
 }
 
 /* Η κάρτα να μην κολλάει/μην γίνεται “τεράστια” σε mobile */
@@ -583,12 +586,6 @@ body{
 }
 .photo img{
   border-radius: 14px;
-}
-body{
-  padding-top: calc(18px + env(safe-area-inset-top));
-  padding-right: 12px;
-  padding-left: 12px;
-  padding-bottom: calc(28px + env(safe-area-inset-bottom));
 }
 
   </style>
@@ -965,5 +962,6 @@ Map: https://share.google/8tWEwYzo6fyaF4XkA`;
   </script>
 </body>
 </html>
+
 
 
